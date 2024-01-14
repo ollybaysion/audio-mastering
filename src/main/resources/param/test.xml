@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<processor>
+    <equaliser>
+        <LOWSHELF>
+            <Gain>0.1</Gain>
+            <Freq>0.5</Freq>
+            <Q>1.2</Q>
+        </LOWSHELF>
+        <LOWSHELF>
+            <Gain>0.1</Gain>
+            <Freq>0.5</Freq>
+            <Q>1.2</Q>
+        </LOWSHELF>
+        <LOWSHELF>
+            <Gain>0.1</Gain>
+            <Freq>0.5</Freq>
+            <Q>1.2</Q>
+        </LOWSHELF>
+        <LOWSHELF>
+            <Gain>0.1</Gain>
+            <Freq>0.5</Freq>
+            <Q>1.2</Q>
+        </LOWSHELF>
+        <LOWSHELF>
+            <Gain>0.1</Gain>
+            <Freq>0.5</Freq>
+            <Q>1.2</Q>
+        </LOWSHELF>
+    </equaliser>
+    <drc>
+        <Threshold>0.1</Threshold>
+        <AttackTime>0.1</AttackTime>
+        <ReleaseTime>0.1</ReleaseTime>
+        <Ratio>0.1</Ratio>
+        <makeupGain>0.1</makeupGain>
+    </drc>
+</processor>
