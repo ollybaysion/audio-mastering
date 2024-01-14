@@ -1,6 +1,7 @@
 package com.audiomaster.controller;
 
 import com.audiomaster.service.AudioMasteringService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,15 +11,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @RequestMapping("mastering")
 @Controller
 public class MasteringController {
 
-    public MasteringController(AudioMasteringService audioMasteringService) {
-        this.audioMasteringService = audioMasteringService;
-    }
-
-    private AudioMasteringService audioMasteringService;
+    private final AudioMasteringService audioMasteringService;
 
     @GetMapping
     public String mastering(ModelMap map) {

@@ -1,11 +1,11 @@
 debug: false
 management.endpoints.web.exposure.include: "*"
 
-logging:
-  level:
+#logging:
+#  level:
 #    com.audiomaster: debug
-    org.springframework.web.servlet: debug
-    org.hibernate.type.descriptor.sql.BasicBinder: trace
+#    org.springframework.web.servlet: debug
+#    org.hibernate.type.descriptor.sql.BasicBinder: trace
 
 spring:
 #  datasource:
