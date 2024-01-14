@@ -4,7 +4,7 @@ import com.audiomaster.plugin.AudioBufferFloat;
 
 public class wavFileReader {
     static {
-        System.loadLibrary("/src/main/java/wavFileReader");
+        System.loadLibrary("wavFileReader");
     }
 
     public wavFileReader() {

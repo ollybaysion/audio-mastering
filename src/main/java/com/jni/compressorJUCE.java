@@ -5,7 +5,7 @@ import com.audiomaster.plugin.compressor;
 
 public class compressorJUCE {
     static {
-        System.loadLibrary("/src/main/java/compressorJUCE");
+        System.loadLibrary("compressorJUCE");
     }
 
     public compressorJUCE() {
