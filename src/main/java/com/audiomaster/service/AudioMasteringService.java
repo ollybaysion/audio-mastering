@@ -15,17 +15,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Set;
 
+@RequiredArgsConstructor
 @Service
 public class AudioMasteringService {
 
-    private wavFileReader wavFileReader;
-    private compressorJUCE compressorJuceJni;
-
-    public AudioMasteringService() {
-        this.wavFileReader = new wavFileReader();
-        this.compressorJuceJni = new compressorJUCE();
-        this.channel = new channel();
-    }
+    private final wavFileReader wavFileReader;
+    private final compressorJUCE compressorJuceJni;
 
     private static String AudioRepositoryPath = "C:\\spring\\audio";
     private channel channel;
