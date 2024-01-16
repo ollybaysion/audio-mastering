@@ -25,12 +25,18 @@ public class MasteringController {
         return "mastering/main";
     }
 
-    @GetMapping("upload")
+    @GetMapping("compressor")
+    public String compressor(ModelMap map) {
+        map.addAttribute("compressor", List.of());
+        return "mastering/form";
+    }
+
+    @GetMapping("process")
     public String uploadMastering(ModelMap map) {
         return "redirect:/mastering";
     }
 
-    @PostMapping("upload")
+    @PostMapping("process")
     public String uploadMasteringFile(MultipartFile AudioInputFile, ModelMap map) {
         try {
             String origFilename = AudioInputFile.getOriginalFilename();
@@ -51,6 +57,8 @@ public class MasteringController {
         } catch(Exception e) {
             e.printStackTrace();
         }
+
+        map.addAttribute("outputFile", 0);
         return "redirect:/mastering";
     }
 }
