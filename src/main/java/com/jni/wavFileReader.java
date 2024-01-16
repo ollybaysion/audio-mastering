@@ -11,5 +11,5 @@ public class wavFileReader {
     }
 
     public native void loadWavAudioFile(AudioBufferFloat audioBufferFloat);
-    public native void saveWavAudioFile(AudioBufferFloat audioBufferFloat);
+    public native void saveWavAudioFile(AudioBufferFloat audioBufferFloat, String savePath);
 }

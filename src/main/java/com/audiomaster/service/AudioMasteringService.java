@@ -36,6 +36,6 @@ public class AudioMasteringService {
 
         wavFileReader.loadWavAudioFile(channel.getAudioBufferFloat());
         compressorJuceJni.processAndLoad(channel.getAudioBufferFloat(), new compressor(0.1, 0.1, 0.1, 0.1, 0.1));
-        wavFileReader.saveWavAudioFile(channel.getAudioBufferFloat());
+        wavFileReader.saveWavAudioFile(channel.getAudioBufferFloat(), "");
     }
 }
