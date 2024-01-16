@@ -5,15 +5,11 @@ import com.audiomaster.plugin.compressor;
 import com.jni.compressorJUCE;
 import com.jni.wavFileReader;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
 import java.io.File;
 import java.io.IOException;
-import java.util.Set;
 
 @RequiredArgsConstructor
 @Service
@@ -22,7 +18,7 @@ public class AudioMasteringService {
     private final wavFileReader wavFileReader;
     private final compressorJUCE compressorJuceJni;
 
-    private static String AudioRepositoryPath = "C:\\spring\\audio";
+    private static String AudioRepositoryPath = "/src/main";
     private channel channel;
 
     public void saveAudioFile(MultipartFile[] AudioInputFile) {
