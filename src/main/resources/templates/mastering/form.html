@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://ww.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mastering Your Own Audio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+    <header id="header"></header>
+    <div class="container">
+        <form action="mastering/process" method="post" enctype="multipart/form-data">
+            <div>
+                <h4> Step 1: 오디오 업로드 </h4>
+                <div class="mb-3">
+                    <label class="form-label">음원 파일을 업로드하세요</label>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-control" type="file" name="AudioInputFile">
+                    </div>
+                </div>
+                <hr class="hr" />
+            </div>
+            <div class="container">
+                <h4> Step 2: Parameter 조절 </h4>
+                <label for="inputThreshold" class="form-label">Threshold</label>
+                <div class="input-group mb-3" style="width: 30%">
+                    <input type="text" class="form-control" name="threshold" id="inputThreshold" placeholder="-20.0">
+                </div>
+                <label for="inputRatio" class="form-label">Ratio</label>
+                <div class="input-group mb-3" style="width: 30%">
+                    <input type="text" class="form-control" name="ratio" id="inputRatio" placeholder="2.0">
+                </div>
+                <label for="inputKnee" class="form-label">Knee</label>
+                <div class="input-group mb-3" style="width: 30%">
+                    <input type="text" class="form-control" name="knee" id="inputKnee" placeholder="6.0">
+                </div>
+                <label for="inputAttack" class="form-label">Attack</label>
+                <div class="input-group mb-3" style="width: 30%">
+                    <input type="text" class="form-control" name="attack" id="inputAttack" placeholder="0.01">
+                </div>
+                <label for="inputRelease" class="form-label">Release</label>
+                <div class="input-group mb-3" style="width: 30%">
+                    <input type="text" class="form-control" name="release" id="inputRelease" placeholder="0.14">
+                </div>
+                <hr class="hr" />
+            </div>
+            <div class="d-flex justify-content-center">
+                <button>
+                    <label> 마스터링 시작 </label>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <footer id="footer"></footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>
