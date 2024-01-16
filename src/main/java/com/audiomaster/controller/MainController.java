@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MainController {
     @GetMapping
     public String root(ModelMap map) {
-        return "/main";
+        return "main";
     }
 }
