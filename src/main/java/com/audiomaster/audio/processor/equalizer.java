@@ -1,6 +1,6 @@
-package com.audiomaster.plugin;
+package com.audiomaster.audio.processor;
 
-import com.audiomaster.plugin.type.EqType;
+import com.audiomaster.audio.type.EqType;
 import lombok.Getter;
 
 import java.util.ArrayList;

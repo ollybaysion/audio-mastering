@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://ww.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Mastering Your Own Audio</title>
@@ -8,38 +8,38 @@
 <body>
     <header id="header"></header>
     <div class="container">
-        <form action="mastering/process" method="post" enctype="multipart/form-data">
+        <form th:action="@{/mastering/compressor}" th:object="${inputAudioContent}" method="post" enctype="multipart/form-data">
             <div>
                 <h4> Step 1: 오디오 업로드 </h4>
                 <div class="mb-3">
-                    <label class="form-label">음원 파일을 업로드하세요</label>
                     <div class="d-flex justify-content-center">
-                        <input class="form-control" type="file" name="AudioInputFile">
+                        <label for="AudioInputFile" class="form-label">음원 파일을 업로드하세요</label>
+                        <input class="form-control" id="AudioInputFile" type="file" th:field="*{inputAudioFile}">
                     </div>
                 </div>
                 <hr class="hr" />
             </div>
             <div class="container">
-                <h4> Step 2: Parameter 조절 </h4>
-                <label for="inputThreshold" class="form-label">Threshold</label>
+                <h4> Step 2: Setting </h4>
                 <div class="input-group mb-3" style="width: 30%">
-                    <input type="text" class="form-control" name="threshold" id="inputThreshold" placeholder="-20.0">
+                    <label for="inputThreshold" class="form-label">Threshold</label>
+                    <input type="text" class="form-control" th:field="*{threshold}" id="inputThreshold" placeholder="-20.0">
                 </div>
-                <label for="inputRatio" class="form-label">Ratio</label>
                 <div class="input-group mb-3" style="width: 30%">
-                    <input type="text" class="form-control" name="ratio" id="inputRatio" placeholder="2.0">
+                    <label for="inputRatio" class="form-label">Ratio</label>
+                    <input type="text" class="form-control" th:field="*{ratio}" id="inputRatio" placeholder="2.0">
                 </div>
-                <label for="inputKnee" class="form-label">Knee</label>
                 <div class="input-group mb-3" style="width: 30%">
-                    <input type="text" class="form-control" name="knee" id="inputKnee" placeholder="6.0">
+                    <label for="inputKnee" class="form-label">Knee</label>
+                    <input type="text" class="form-control" th:field="*{knee}" id="inputKnee" placeholder="6.0">
                 </div>
-                <label for="inputAttack" class="form-label">Attack</label>
                 <div class="input-group mb-3" style="width: 30%">
-                    <input type="text" class="form-control" name="attack" id="inputAttack" placeholder="0.01">
+                    <label for="inputAttack" class="form-label">Attack</label>
+                    <input type="text" class="form-control" th:field="*{attack}" id="inputAttack" placeholder="0.01">
                 </div>
-                <label for="inputRelease" class="form-label">Release</label>
                 <div class="input-group mb-3" style="width: 30%">
-                    <input type="text" class="form-control" name="release" id="inputRelease" placeholder="0.14">
+                    <label for="inputRelease" class="form-label">Release</label>
+                    <input type="text" class="form-control" th:field="*{release}" id="inputRelease" placeholder="0.14">
                 </div>
                 <hr class="hr" />
             </div>
@@ -49,6 +49,19 @@
                 </button>
             </div>
         </form>
+        <div th:if="${AudioProcessStatus}">
+            <label> 입력 음원</label>
+            <audio controls>
+                <source src="/mastering/audio/input.wav">
+            </audio>
+        </div>
+        <div th:if="${AudioProcessStatus}">
+            <label> 출력 음원 </label>
+            <audio controls>
+                <source src="/mastering/audio/output.wav">
+            </audio>
+        </div>
+        <a href="/mastering/compressor">처음부터 다시하기</a>
     </div>
 
     <footer id="footer"></footer>

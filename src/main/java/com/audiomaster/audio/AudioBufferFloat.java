@@ -1,4 +1,4 @@
-package com.audiomaster.plugin;
+package com.audiomaster.audio;
 
 public class AudioBufferFloat {
     private float[][] channels;
@@ -6,7 +6,6 @@ public class AudioBufferFloat {
     private int numSamples;
     private double sampleRate;
     private int bitsPerSample;
-    private String filePath;
 
     public AudioBufferFloat() {
     }
@@ -21,10 +20,6 @@ public class AudioBufferFloat {
         for(int i=0; i<numChannels; i++) {
             channels[i] = new float[numSamples];
         }
-    }
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
     }
 
     public void setChannel(float[] src, int ch) {
@@ -61,10 +56,6 @@ public class AudioBufferFloat {
         return numSamples;
     }
 
-    public String getFilePath() {
-        return filePath;
-    }
-
     @Override
     public String toString() {
         return "AudioBufferFloat{" +
@@ -72,7 +63,6 @@ public class AudioBufferFloat {
                 ", numSamples=" + numSamples +
                 ", sampleRate=" + sampleRate +
                 ", bitsPerSample=" + bitsPerSample +
-                ", filePath='" + filePath + '\'' +
                 '}';
     }
 }
