@@ -1,15 +1,20 @@
 package com.audiomaster.controller;
 
+import com.audiomaster.domain.constant.AudioProcessStatus;
+import com.audiomaster.dto.AudioContentDto;
+import com.audiomaster.dto.request.AudioContentRequest;
+import com.audiomaster.dto.response.AudioContentResponse;
 import com.audiomaster.service.AudioMasteringService;
+import com.audiomaster.service.component.FileStore;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -18,6 +23,7 @@ import java.util.List;
 public class MasteringController {
 
     private final AudioMasteringService audioMasteringService;
+    private final FileStore fileStore;
 
     @GetMapping
     public String mastering(ModelMap map) {
@@ -27,38 +33,23 @@ public class MasteringController {
 
     @GetMapping("compressor")
     public String compressor(ModelMap map) {
-        map.addAttribute("compressor", List.of());
+        map.addAttribute("inputAudioContent", new AudioContentRequest());
         return "mastering/form";
     }
 
-    @GetMapping("process")
-    public String uploadMastering(ModelMap map) {
-        return "redirect:/mastering";
+    @PostMapping("compressor")
+    public String uploadMasteringFile(@ModelAttribute AudioContentRequest inputAudioContent, ModelMap map) throws IOException {
+        AudioContentDto audioContentDto = audioMasteringService.processCompressor(inputAudioContent.toDto());
+
+        map.addAttribute("inputAudioContent", inputAudioContent);
+        map.addAttribute("AudioProcessStatus", AudioProcessStatus.OK);
+        map.addAttribute("outputAudioContent", AudioContentResponse.from(audioContentDto));
+        return "mastering/form";
     }
 
-    @PostMapping("process")
-    public String uploadMasteringFile(MultipartFile AudioInputFile, ModelMap map) {
-        try {
-            String origFilename = AudioInputFile.getOriginalFilename();
-            String filename = origFilename;    // TODO - MD5를 통한 Encryption
-            String savePath = System.getProperty("user.home") + "\\audio";
-
-            if (!new File(savePath).exists()) {
-                try{
-                    new File(savePath).mkdir();
-                }
-                catch(Exception e){
-                    e.getStackTrace();
-                }
-            }
-
-            String filePath = savePath + "\\" + filename;
-            AudioInputFile.transferTo(new File(filePath));
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-
-        map.addAttribute("outputFile", 0);
-        return "redirect:/mastering";
+    @ResponseBody
+    @GetMapping("/audio/{filename}")
+    public Resource getAudio(@PathVariable String filename, ModelMap map) throws MalformedURLException {
+        return new UrlResource("file:" + fileStore.getFullPath(filename));
     }
 }
