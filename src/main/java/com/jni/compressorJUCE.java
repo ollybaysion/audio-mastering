@@ -1,7 +1,7 @@
 package com.jni;
 
-import com.audiomaster.plugin.AudioBufferFloat;
-import com.audiomaster.plugin.compressor;
+import com.audiomaster.audio.AudioBufferFloat;
+import com.audiomaster.audio.processor.compressor;
 
 public class compressorJUCE {
     static {

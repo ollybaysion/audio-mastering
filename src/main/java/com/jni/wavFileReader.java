@@ -1,6 +1,6 @@
 package com.jni;
 
-import com.audiomaster.plugin.AudioBufferFloat;
+import com.audiomaster.audio.AudioBufferFloat;
 
 public class wavFileReader {
     static {
@@ -10,6 +10,6 @@ public class wavFileReader {
     public wavFileReader() {
     }
 
-    public native void loadWavAudioFile(AudioBufferFloat audioBufferFloat);
+    public native void loadWavAudioFile(AudioBufferFloat audioBufferFloat, String inputPath);
     public native void saveWavAudioFile(AudioBufferFloat audioBufferFloat, String savePath);
 }
