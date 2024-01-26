@@ -1,6 +1,5 @@
 package com.audiomaster.audio;
 
-import com.audiomaster.audio.processor.processor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,9 +8,9 @@ import lombok.Setter;
 public class AudioWrapper {
 
     private AudioBufferFloat audioBufferFloat;
-    private processor processorList;
+    private processorWrapper processorList;
 
-    public AudioWrapper(processor processorList) {
+    public AudioWrapper(processorWrapper processorList) {
         audioBufferFloat = new AudioBufferFloat();
         this.processorList = processorList;
     }
