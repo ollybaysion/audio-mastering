@@ -2,7 +2,8 @@ package com.audiomaster.controller;
 
 import com.audiomaster.domain.constant.AudioProcessStatus;
 import com.audiomaster.dto.AudioContentDto;
-import com.audiomaster.dto.request.AudioContentRequest;
+import com.audiomaster.dto.request.CompressorJuceRequest;
+import com.audiomaster.dto.request.CompressorLspRequest;
 import com.audiomaster.dto.response.AudioContentResponse;
 import com.audiomaster.service.AudioMasteringService;
 import com.audiomaster.service.component.FileStore;
@@ -31,20 +32,36 @@ public class MasteringController {
         return "mastering/main";
     }
 
-    @GetMapping("compressor")
-    public String compressor(ModelMap map) {
-        map.addAttribute("inputAudioContent", new AudioContentRequest());
-        return "mastering/form";
+    @GetMapping("compressor1")
+    public String compressor1(ModelMap map) {
+        map.addAttribute("inputAudioContent", new CompressorJuceRequest());
+        return "mastering/compressorJUCE";
     }
 
-    @PostMapping("compressor")
-    public String uploadMasteringFile(@ModelAttribute AudioContentRequest inputAudioContent, ModelMap map) throws IOException {
-        AudioContentDto audioContentDto = audioMasteringService.processCompressor(inputAudioContent.toDto());
+    @PostMapping("compressor1")
+    public String uploadMasteringFile1(@ModelAttribute CompressorJuceRequest inputAudioContent, ModelMap map) throws IOException {
+        AudioContentDto audioContentDto = audioMasteringService.processCompressorJuce(inputAudioContent.toDto());
 
         map.addAttribute("inputAudioContent", inputAudioContent);
         map.addAttribute("AudioProcessStatus", AudioProcessStatus.OK);
         map.addAttribute("outputAudioContent", AudioContentResponse.from(audioContentDto));
-        return "mastering/form";
+        return "mastering/compressorJUCE";
+    }
+
+    @GetMapping("compressor2")
+    public String compressor2(ModelMap map) {
+        map.addAttribute("inputAudioContent", new CompressorLspRequest());
+        return "mastering/compressorLSP";
+    }
+
+    @PostMapping("compressor2")
+    public String uploadMasteringFile2(@ModelAttribute CompressorLspRequest inputAudioContent, ModelMap map) throws IOException {
+        AudioContentDto audioContentDto = audioMasteringService.processCompressorLsp(inputAudioContent.toDto());
+
+        map.addAttribute("inputAudioContent", inputAudioContent);
+        map.addAttribute("AudioProcessStatus", AudioProcessStatus.OK);
+        map.addAttribute("outputAudioContent", AudioContentResponse.from(audioContentDto));
+        return "mastering/compressorLSP";
     }
 
     @ResponseBody

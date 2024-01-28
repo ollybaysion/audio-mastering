@@ -1,7 +1,7 @@
 package com.jni;
 
 import com.audiomaster.audio.AudioBufferFloat;
-import com.audiomaster.audio.processor.compressor;
+import com.audiomaster.audio.processor.compressorJuce;
 
 public class compressorJUCE {
     static {
@@ -11,5 +11,5 @@ public class compressorJUCE {
     public compressorJUCE() {
     }
 
-    public native void processAndLoad(AudioBufferFloat audioBufferFloat, compressor compressor_param);
+    public native void processAndLoad(AudioBufferFloat audioBufferFloat, compressorJuce compressor_Juce_param);
 }

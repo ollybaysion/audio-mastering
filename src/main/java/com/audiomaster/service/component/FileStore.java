@@ -9,7 +9,7 @@ import java.io.IOException;
 public class FileStore {
 
     private final String rootPath = System.getProperty("user.home");
-    private final String fileDir = rootPath + "\\audio\\";
+    private final String fileDir = rootPath + "/audio/";
 
     public String getFullPath(String filename) { return fileDir + filename; }
 
