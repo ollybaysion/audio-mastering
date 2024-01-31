@@ -1,12 +1,8 @@
 package com.audiomaster.controller;
 
-import com.audiomaster.domain.constant.AudioProcessStatus;
-import com.audiomaster.dto.AudioContentDto;
-import com.audiomaster.dto.request.CompressorJuceRequest;
-import com.audiomaster.dto.request.CompressorLspRequest;
-import com.audiomaster.dto.response.AudioContentResponse;
+import com.audiomaster.dto.request.AudioFormRequest;
 import com.audiomaster.service.AudioMasteringService;
-import com.audiomaster.service.component.FileStore;
+import com.audiomaster.service.FileStore;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -16,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("mastering")
@@ -28,40 +23,22 @@ public class MasteringController {
 
     @GetMapping
     public String mastering(ModelMap map) {
-        map.addAttribute("matsering", List.of());
+        map.addAttribute("processors", audioMasteringService.getProcessorList());
         return "mastering/main";
     }
 
-    @GetMapping("compressor1")
-    public String compressor1(ModelMap map) {
-        map.addAttribute("inputAudioContent", new CompressorJuceRequest());
-        return "mastering/compressorJUCE";
+    @GetMapping("form/{processorType}")
+    public String formGet(@PathVariable String processorType, ModelMap map) {
+        map.addAttribute("request", audioMasteringService.getRequest(processorType));
+        map.addAttribute("processorType", processorType);
+        map.addAttribute("params", audioMasteringService.getParams(processorType));
+        return "mastering/form";
     }
 
-    @PostMapping("compressor1")
-    public String uploadMasteringFile1(@ModelAttribute CompressorJuceRequest inputAudioContent, ModelMap map) throws IOException {
-        AudioContentDto audioContentDto = audioMasteringService.processCompressorJuce(inputAudioContent.toDto());
-
-        map.addAttribute("inputAudioContent", inputAudioContent);
-        map.addAttribute("AudioProcessStatus", AudioProcessStatus.OK);
-        map.addAttribute("outputAudioContent", AudioContentResponse.from(audioContentDto));
-        return "mastering/compressorJUCE";
-    }
-
-    @GetMapping("compressor2")
-    public String compressor2(ModelMap map) {
-        map.addAttribute("inputAudioContent", new CompressorLspRequest());
-        return "mastering/compressorLSP";
-    }
-
-    @PostMapping("compressor2")
-    public String uploadMasteringFile2(@ModelAttribute CompressorLspRequest inputAudioContent, ModelMap map) throws IOException {
-        AudioContentDto audioContentDto = audioMasteringService.processCompressorLsp(inputAudioContent.toDto());
-
-        map.addAttribute("inputAudioContent", inputAudioContent);
-        map.addAttribute("AudioProcessStatus", AudioProcessStatus.OK);
-        map.addAttribute("outputAudioContent", AudioContentResponse.from(audioContentDto));
-        return "mastering/compressorLSP";
+    @PostMapping("form/{processorType}")
+    public String formPost(@PathVariable String processorType, @ModelAttribute AudioFormRequest request, ModelMap map) throws IOException {
+        audioMasteringService.process(request);
+        return "mastering/form";
     }
 
     @ResponseBody
