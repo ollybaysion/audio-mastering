@@ -7,41 +7,23 @@
     <link href="/css/style.css" rel="stylesheet">
 </head>
 <body>
-    <header id="header"></header>
+    <header th:replace="header::header"></header>
     <div class="container">
         <div class="mb-5">
             아래 목록에서 하나를 선택하세요.
         </div>
-        <div class="row d-flex justify-content-around align-items-center">
+        <div th:each="iter : ${processors}" class="row d-flex justify-content-around align-items-center">
             <div class="card w-25">
                 <div class="card-body">
-                    <h5 class="card-title">Compressor1</h5>
-                    <p class="card-text">Compressor 테스트를 원한다면 아래 버튼을 클릭하세요</p>
-                    <div class="d-flex justify-content-center">
-                        <a href="/mastering/compressor1" class="btn btn-primary">Test</a>
-                    </div>
-                </div>
-            </div>
-            <div class="card w-25">
-                <div class="card-body">
-                    <h5 class="card-title">Compressor2</h5>
+                    <h5 class="card-title" th:text="${iter}"></h5>
                     <p class="card-text">테스트를 원한다면 아래 버튼을 클릭하세요</p>
                     <div class="d-flex justify-content-center">
-                        <a href="/mastering/compressor2" class="btn btn-primary">Test</a>
-                    </div>
-                </div>
-            </div>
-            <div class="card w-25">
-                <div class="card-body">
-                    <h5 class="card-title">Reverb</h5>
-                    <p class="card-text">테스트를 원한다면 아래 버튼을 클릭하세요</p>
-                    <div class="d-flex justify-content-center">
-                        <a href="/error" class="btn btn-primary disabled">Test</a>
+                        <a th:href="@{/mastering/form/__${iter}__}" class="btn btn-primary">Test</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <footer id="footer"></footer>
+    <footer th:replace="footer::footer"></footer>
 </body>
 </html>
