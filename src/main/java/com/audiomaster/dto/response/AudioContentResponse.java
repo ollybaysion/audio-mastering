@@ -1,7 +1,5 @@
 package com.audiomaster.dto.response;
 
-import com.audiomaster.dto.AudioContentDto;
-
 public record AudioContentResponse(
         String outputFilename
 ) {
