@@ -1,57 +1,55 @@
 package com.audiomaster.service;
 
-import com.audiomaster.audio.AudioBufferFloat;
 import com.audiomaster.audio.AudioWrapper;
-import com.audiomaster.audio.processor.compressorJuce;
-import com.audiomaster.audio.processor.compressorLsp;
 import com.audiomaster.audio.processorWrapper;
-import com.audiomaster.dto.AudioContentDto;
-import com.audiomaster.service.component.FileStore;
-import com.audiomaster.service.component.jniApi;
-import lombok.RequiredArgsConstructor;
+import com.audiomaster.dto.request.AudioFormRequest;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
 
-@RequiredArgsConstructor
 @Service
 public class AudioMasteringService {
-    private final jniApi jniApi;
+    private final JniService jniService;
     private final FileStore fileStore;
 
-    public AudioContentDto processCompressorJuce(AudioContentDto audioContent) throws IOException {
-        AudioWrapper wrapper = audioContent.toEntity();
-        processorWrapper proc = wrapper.getProcessorList();
-        // 파일 저장
-        String outputFilename = fileStore.storeFile(audioContent);
-
-        // Audio Buffer 읽기
-        jniApi.getWavFileReader().loadWavAudioFile(wrapper.getAudioBufferFloat(), fileStore.getFullPath("input.wav"));
-
-        // Compressor 동작
-        jniApi.getCompressorJUCE().processAndLoad(wrapper.getAudioBufferFloat(), (compressorJuce) proc);
-
-        // Output Audio 저장
-        jniApi.getWavFileReader().saveWavAudioFile(wrapper.getAudioBufferFloat(), fileStore.getFullPath("output.wav"));
-
-        return AudioContentDto.of(outputFilename);
+    public AudioMasteringService(JniService jniService, FileStore fileStore) {
+        this.jniService = jniService;
+        this.fileStore = fileStore;
     }
 
-    public AudioContentDto processCompressorLsp(AudioContentDto audioContent) throws IOException {
-        AudioWrapper wrapper = audioContent.toEntity();
+    public List<String> getProcessorList() {
+        return List.of("CompressorLsp", "EQ");
+    }
+
+    public AudioFormRequest getRequest(String processorType) {
+        return AudioFormRequest.of(processorType);
+    }
+
+    public List<String> getParams(String processorType) {
+        return List.of(
+                "Attack Threshold",
+                "Release Threshold",
+                "Attack Time",
+                "Release Time",
+                "Ratio",
+                "Knee");
+    }
+
+    public void process(AudioFormRequest request) throws IOException {
+        AudioWrapper wrapper = request.toEntity();
         processorWrapper proc = wrapper.getProcessorList();
+
         // 파일 저장
-        String outputFilename = fileStore.storeFile(audioContent);
+        fileStore.storeFile(request.getInputAudioFile());
 
         // Audio Buffer 읽기
-        jniApi.getWavFileReader().loadWavAudioFile(wrapper.getAudioBufferFloat(), fileStore.getFullPath("input.wav"));
+        jniService.getWavFileReader().loadWavAudioFile(wrapper.getAudioBufferFloat(), fileStore.getFullPath("input.wav"));
 
         // Compressor 동작
-        jniApi.getCompressorLSP().processAndLoad(wrapper.getAudioBufferFloat(), (compressorLsp) proc);
+        jniService.process(wrapper.getProcessorType(), wrapper.getAudioBufferFloat(), proc);
 
         // Output Audio 저장
-        jniApi.getWavFileReader().saveWavAudioFile(wrapper.getAudioBufferFloat(), fileStore.getFullPath("output.wav"));
-
-        return AudioContentDto.of(outputFilename);
+        jniService.getWavFileReader().saveWavAudioFile(wrapper.getAudioBufferFloat(), fileStore.getFullPath("output.wav"));
     }
 }

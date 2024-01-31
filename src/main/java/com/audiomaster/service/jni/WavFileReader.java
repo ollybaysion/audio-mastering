@@ -1,13 +1,15 @@
-package com.jni;
+package com.audiomaster.service.jni;
 
 import com.audiomaster.audio.AudioBufferFloat;
+import org.springframework.stereotype.Service;
 
-public class wavFileReader {
+@Service
+public class WavFileReader {
     static {
         System.loadLibrary("wavFileReader");
     }
 
-    public wavFileReader() {
+    public WavFileReader() {
     }
 
     public native void loadWavAudioFile(AudioBufferFloat audioBufferFloat, String inputPath);

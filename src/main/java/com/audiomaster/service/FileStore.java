@@ -1,11 +1,12 @@
-package com.audiomaster.service.component;
+package com.audiomaster.service;
 
-import com.audiomaster.dto.AudioContentDto;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
 
+@Service
 public class FileStore {
 
     private final String rootPath = System.getProperty("user.home");
@@ -13,10 +14,7 @@ public class FileStore {
 
     public String getFullPath(String filename) { return fileDir + filename; }
 
-    public String storeFile(AudioContentDto audioContentDto) throws IOException {
-
-        MultipartFile multipartFile = audioContentDto.inputAudioFile();
-
+    public void storeFile(MultipartFile multipartFile) throws IOException {
         String inputFilename = getFullPath("input.wav");
         String outputFilename = getOutputFilename(multipartFile.getOriginalFilename());
 
@@ -30,8 +28,6 @@ public class FileStore {
         }
 
         multipartFile.transferTo(new File(inputFilename));
-
-        return outputFilename;
     }
 
     // 확장자 추출
