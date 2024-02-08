@@ -24,8 +24,4 @@ public class AudioFormRequest {
     public static AudioFormRequest of(String processorType) {
         return new AudioFormRequest(processorType);
     }
-
-    public AudioWrapper toEntity() {
-        return AudioWrapper.of(processorType, null);
-    }
 }
