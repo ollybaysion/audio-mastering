@@ -1,23 +1,21 @@
-package com.audiomaster.service.component;
+package com.audiomaster.service;
 
-import com.audiomaster.dto.AudioContentDto;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
 
+@Service
 public class FileStore {
 
-    private final String rootPath = System.getProperty("user.home");
-    private final String fileDir = rootPath + "/audio/";
+    private static final String rootPath = System.getProperty("user.home");
+    private static final String fileDir = rootPath + "/audio/";
 
-    public String getFullPath(String filename) { return fileDir + filename; }
+    public static String getFullPath(String filename) { return fileDir + filename; }
 
-    public String storeFile(AudioContentDto audioContentDto) throws IOException {
-
-        MultipartFile multipartFile = audioContentDto.inputAudioFile();
-
-        String inputFilename = getFullPath("input.wav");
+    public static void saveMultipartfile(MultipartFile multipartFile, String fileName) throws IOException {
+        String inputFilename = getFullPath(fileName);
         String outputFilename = getOutputFilename(multipartFile.getOriginalFilename());
 
         if (!new File(inputFilename).exists()) {
@@ -30,12 +28,10 @@ public class FileStore {
         }
 
         multipartFile.transferTo(new File(inputFilename));
-
-        return outputFilename;
     }
 
     // 확장자 추출
-    private String extractExt(String originalFilename) {
+    private static String extractExt(String originalFilename) {
         int pos = originalFilename.lastIndexOf(".");
         return originalFilename.substring(pos + 1);
     }
@@ -45,7 +41,7 @@ public class FileStore {
         return originalFilename.substring(0, pos);
     }
 
-    private String getOutputFilename(String inputFilename) {
+    private static String getOutputFilename(String inputFilename) {
         return "output." + extractExt(inputFilename);
     }
 }

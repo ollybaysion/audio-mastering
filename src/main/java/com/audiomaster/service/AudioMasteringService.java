@@ -1,57 +1,40 @@
 package com.audiomaster.service;
 
-import com.audiomaster.audio.AudioBufferFloat;
-import com.audiomaster.audio.AudioWrapper;
-import com.audiomaster.audio.processor.compressorJuce;
-import com.audiomaster.audio.processor.compressorLsp;
-import com.audiomaster.audio.processorWrapper;
-import com.audiomaster.dto.AudioContentDto;
-import com.audiomaster.service.component.FileStore;
-import com.audiomaster.service.component.jniApi;
-import lombok.RequiredArgsConstructor;
+import com.audiomaster.audio.AudioEntity;
+import com.audiomaster.audio.ProcessorType;
+import com.audiomaster.dto.request.AudioFormRequest;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-@RequiredArgsConstructor
 @Service
 public class AudioMasteringService {
-    private final jniApi jniApi;
-    private final FileStore fileStore;
 
-    public AudioContentDto processCompressorJuce(AudioContentDto audioContent) throws IOException {
-        AudioWrapper wrapper = audioContent.toEntity();
-        processorWrapper proc = wrapper.getProcessorList();
-        // 파일 저장
-        String outputFilename = fileStore.storeFile(audioContent);
-
-        // Audio Buffer 읽기
-        jniApi.getWavFileReader().loadWavAudioFile(wrapper.getAudioBufferFloat(), fileStore.getFullPath("input.wav"));
-
-        // Compressor 동작
-        jniApi.getCompressorJUCE().processAndLoad(wrapper.getAudioBufferFloat(), (compressorJuce) proc);
-
-        // Output Audio 저장
-        jniApi.getWavFileReader().saveWavAudioFile(wrapper.getAudioBufferFloat(), fileStore.getFullPath("output.wav"));
-
-        return AudioContentDto.of(outputFilename);
+    public List<String> getProcessorList() {
+        return Stream.of(ProcessorType.values())
+                .map(ProcessorType::getTypeName)
+                .collect(Collectors.toList());
     }
 
-    public AudioContentDto processCompressorLsp(AudioContentDto audioContent) throws IOException {
-        AudioWrapper wrapper = audioContent.toEntity();
-        processorWrapper proc = wrapper.getProcessorList();
-        // 파일 저장
-        String outputFilename = fileStore.storeFile(audioContent);
+    public List<String> getProcessorUrlList() {
+        return Stream.of(ProcessorType.values())
+                .map(ProcessorType::getTypeUrl)
+                .collect(Collectors.toList());
+    }
 
-        // Audio Buffer 읽기
-        jniApi.getWavFileReader().loadWavAudioFile(wrapper.getAudioBufferFloat(), fileStore.getFullPath("input.wav"));
+    public AudioFormRequest getRequest(String processorTypeUrl) {
+        return AudioFormRequest.of(processorTypeUrl);
+    }
 
-        // Compressor 동작
-        jniApi.getCompressorLSP().processAndLoad(wrapper.getAudioBufferFloat(), (compressorLsp) proc);
+    public List<String> getParams(ProcessorType processorType) {
+        return processorType.getParamText();
+    }
 
-        // Output Audio 저장
-        jniApi.getWavFileReader().saveWavAudioFile(wrapper.getAudioBufferFloat(), fileStore.getFullPath("output.wav"));
-
-        return AudioContentDto.of(outputFilename);
+    public void process(AudioFormRequest request) {
+        AudioEntity entity = AudioEntity.of(request);
+        JniService.process(entity);
+        JniService.save(entity.getAudioBuffer(), "output.wav");
     }
 }
