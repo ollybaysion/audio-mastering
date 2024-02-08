@@ -12,13 +12,13 @@
         <div class="mb-5">
             아래 목록에서 하나를 선택하세요.
         </div>
-        <div th:each="iter : ${processors}" class="row d-flex justify-content-around align-items-center">
+        <div th:each="iter, iterstat : ${processors}" class="row d-flex justify-content-around align-items-center">
             <div class="card w-25">
                 <div class="card-body">
                     <h5 class="card-title" th:text="${iter}"></h5>
                     <p class="card-text">테스트를 원한다면 아래 버튼을 클릭하세요</p>
                     <div class="d-flex justify-content-center">
-                        <a th:href="@{/mastering/form/__${iter}__}" class="btn btn-primary">Test</a>
+                        <a th:href="@{/mastering/form/__${urls[iterstat.index]}__}" class="btn btn-primary">Test</a>
                     </div>
                 </div>
             </div>

@@ -8,7 +8,7 @@
 <body>
     <header th:replace="header::header"></header>
     <div class="container">
-        <form th:action="@{/mastering/form/${processorType}}" th:object="${request}" method="post" enctype="multipart/form-data">
+        <form th:action="@{/mastering/form/__${processorUrl}__}" th:object="${request}" method="post" enctype="multipart/form-data">
             <div>
                 <h4> Step 1: 오디오 업로드 </h4>
                 <div class="mb-3">
