@@ -1,13 +1,13 @@
 package com.audiomaster.audio;
 
-public class AudioBufferFloat {
+public class AudioBuffer {
     private float[][] channels;
     private int numChannels;
     private int numSamples;
     private double sampleRate;
     private int bitsPerSample;
 
-    public AudioBufferFloat() {
+    public AudioBuffer() {
     }
 
     public void setNumChannels(int numChannels) {
@@ -26,6 +26,10 @@ public class AudioBufferFloat {
         for(int i=0; i<numSamples; i++) {
             channels[ch][i] = src[i];
         }
+    }
+
+    public void setChannelIdx(float src, int ch, int idx) {
+        channels[ch][idx] = src;
     }
 
     public void setSampleRate(double sampleRate) {
