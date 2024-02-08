@@ -1,7 +1,6 @@
 package com.audiomaster.dto.request;
 
-import com.audiomaster.audio.AudioEntity;
-import com.audiomaster.audio.ProcessorType;
+import com.audiomaster.audio.AudioWrapper;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,7 +17,7 @@ public class AudioFormRequest {
 
     public AudioFormRequest(String processorType) {
         this.processorType = processorType;
-        params = new ArrayList<>(ProcessorType.findByTypeUrl(processorType).getParamText().size());
+        params = new ArrayList<>(6);
     }
 
     public static AudioFormRequest of(String processorType) {
