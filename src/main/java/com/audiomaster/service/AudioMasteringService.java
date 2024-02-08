@@ -1,55 +1,40 @@
 package com.audiomaster.service;
 
-import com.audiomaster.audio.AudioWrapper;
-import com.audiomaster.audio.processorWrapper;
+import com.audiomaster.audio.AudioEntity;
+import com.audiomaster.audio.ProcessorType;
 import com.audiomaster.dto.request.AudioFormRequest;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class AudioMasteringService {
-    private final JniService jniService;
-    private final FileStore fileStore;
-
-    public AudioMasteringService(JniService jniService, FileStore fileStore) {
-        this.jniService = jniService;
-        this.fileStore = fileStore;
-    }
 
     public List<String> getProcessorList() {
-        return List.of("CompressorLsp", "EQ");
+        return Stream.of(ProcessorType.values())
+                .map(ProcessorType::getTypeName)
+                .collect(Collectors.toList());
     }
 
-    public AudioFormRequest getRequest(String processorType) {
-        return AudioFormRequest.of(processorType);
+    public List<String> getProcessorUrlList() {
+        return Stream.of(ProcessorType.values())
+                .map(ProcessorType::getTypeUrl)
+                .collect(Collectors.toList());
     }
 
-    public List<String> getParams(String processorType) {
-        return List.of(
-                "Attack Threshold",
-                "Release Threshold",
-                "Attack Time",
-                "Release Time",
-                "Ratio",
-                "Knee");
+    public AudioFormRequest getRequest(String processorTypeUrl) {
+        return AudioFormRequest.of(processorTypeUrl);
     }
 
-    public void process(AudioFormRequest request) throws IOException {
-        AudioWrapper wrapper = request.toEntity();
-        processorWrapper proc = wrapper.getProcessorList();
+    public List<String> getParams(ProcessorType processorType) {
+        return processorType.getParamText();
+    }
 
-        // 파일 저장
-        fileStore.storeFile(request.getInputAudioFile());
-
-        // Audio Buffer 읽기
-        jniService.getWavFileReader().loadWavAudioFile(wrapper.getAudioBufferFloat(), fileStore.getFullPath("input.wav"));
-
-        // Compressor 동작
-        jniService.process(wrapper.getProcessorType(), wrapper.getAudioBufferFloat(), proc);
-
-        // Output Audio 저장
-        jniService.getWavFileReader().saveWavAudioFile(wrapper.getAudioBufferFloat(), fileStore.getFullPath("output.wav"));
+    public void process(AudioFormRequest request) {
+        AudioEntity entity = AudioEntity.of(request);
+        JniService.process(entity);
+        JniService.save(entity.getAudioBuffer(), "output.wav");
     }
 }

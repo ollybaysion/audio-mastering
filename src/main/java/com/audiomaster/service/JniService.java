@@ -1,10 +1,8 @@
 package com.audiomaster.service;
 
-import com.audiomaster.audio.AudioBufferFloat;
-import com.audiomaster.audio.processor.compressorLsp;
-import com.audiomaster.audio.processorWrapper;
-import com.audiomaster.service.jni.CompressorJUCE;
-import com.audiomaster.service.jni.CompressorLSP;
+import com.audiomaster.audio.AudioBuffer;
+import com.audiomaster.audio.AudioEntity;
+import com.audiomaster.service.jni.AudioLibrary;
 import com.audiomaster.service.jni.WavFileReader;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
@@ -12,19 +10,22 @@ import org.springframework.stereotype.Service;
 @Getter
 @Service
 public class JniService {
-    private final WavFileReader wavFileReader;
-    private final CompressorJUCE compressorJUCE;
-    private final CompressorLSP compressorLSP;
+    private static WavFileReader wavFileReader;
+    private static AudioLibrary audioLibrary;
 
-    public JniService(WavFileReader wavFileReader, CompressorJUCE compressorJUCE, CompressorLSP compressorLSP) {
-        this.wavFileReader = wavFileReader;
-        this.compressorJUCE = compressorJUCE;
-        this.compressorLSP = compressorLSP;
+    public JniService(WavFileReader wavFileReader, AudioLibrary audioLibrary) {
+        JniService.wavFileReader = wavFileReader;
+        JniService.audioLibrary = audioLibrary;
     }
 
-    public void process(String processorType, AudioBufferFloat audioBufferFloat, processorWrapper proc) {
-        if(processorType.equalsIgnoreCase("compressorlsp")) {
-            compressorLSP.processAndLoad(audioBufferFloat, (compressorLsp) proc);
-        }
+    public static void load(AudioBuffer buffer, String fileName) {
+        wavFileReader.loadWavAudioFile(buffer, fileName);
+    }
+
+    public static void save(AudioBuffer buffer, String fileName) {
+        wavFileReader.saveWavAudioFile(buffer, FileStore.getFullPath(fileName));
+    }
+    public static void process(AudioEntity entity) {
+        audioLibrary.processAndLoad(entity.getProcessorType().getTypeId(), entity.getAudioBuffer(), entity.getParamDto());
     }
 }
