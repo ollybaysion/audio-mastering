@@ -12,4 +12,10 @@ public class MainController {
     public String root(ModelMap map) {
         return "main";
     }
+
+    @GetMapping("error")
+    public String error(ModelMap map) {
+        return "/error";
+    }
+
 }
